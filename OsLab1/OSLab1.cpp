@@ -10,7 +10,7 @@ bool finalMsg = false;
 void* provider(void*) {
     for (int i = 0; i < 10; i++) {
         sleep(1);
-		while(ready) { // !ready = отправлено сообщение, но пока не обработано
+		while(ready) { // ready = отправлено сообщение, но пока не обработано
 			
 		}
         pthread_mutex_lock(&mutex);
@@ -47,4 +47,5 @@ int main() {
     pthread_join(prov, nullptr);
     pthread_join(cons, nullptr);
     return 0;
+
 }
