@@ -10,6 +10,9 @@ bool finalMsg = false;
 void* provider(void*) {
     for (int i = 0; i < 10; i++) {
         sleep(1);
+		while(ready) { // !ready = отправлено сообщение, но пока не обработано
+			
+		}
         pthread_mutex_lock(&mutex);
         ready = true;
         if (i == 9) finalMsg = true;
@@ -24,6 +27,7 @@ void* consumer(void*) {
     while (true) {
         pthread_mutex_lock(&mutex);
         while (!ready) pthread_cond_wait(&cond, &mutex);
+		sleep(2);
         ready = false;
         std::cout << "Recieved\n";
         if (finalMsg)
