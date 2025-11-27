@@ -76,7 +76,7 @@ int main()
             }
             client = accept(intSocket, nullptr, nullptr);
             std::cout << "Client connected!\n";
-
+            continue;
         }
         if (client != -1 && FD_ISSET(client, &fds))
         {
@@ -98,4 +98,5 @@ int main()
     if (client != -1) close(client);
     close(intSocket);
     return 0;
+
 }
