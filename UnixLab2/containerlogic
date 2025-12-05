@@ -1,0 +1,47 @@
+#!/bin/sh
+fileIndex=0
+shared=/main/shared
+echo "started"
+lock=/main/shared/.lockfile
+touch $lock
+
+ContainerExit()
+{
+    flock -u 200
+    echo "ContainerExit()"
+    returnCode=$?
+    trap - EXIT
+    rm "$shared/$createdFile"
+    exit $returnCode
+}
+trap ContainerExit EXIT TERM INT QUIT HUP
+
+exec 200>"$lock"
+
+while :; do
+    created=""
+    flock -x 200
+    i=1
+    while [ $i -lt 1000 ]; do
+        filename=$(printf %03d $i)
+        filePath=$shared/$filename
+	if [ ! -e "$filePath" ]; then
+            touch $filePath
+	    echo "$HOSTNAME $fileIndex" > "$filePath"
+	    fileIndex=$((fileIndex+1))
+	    createdFile="$filename"
+	    break 
+	fi
+	i=$((i+1))
+    done  
+    
+    flock -u 200
+    if [ -n "$createdFile" ]; then
+        echo "$HOSTNAME $fileIndex"
+        sleep 1
+	rm "$shared/$createdFile"
+    else
+        sleep 1
+fi
+	
+done

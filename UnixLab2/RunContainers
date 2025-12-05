@@ -1,0 +1,33 @@
+#!/bin/sh
+Tom=$1;
+containerCount=$2;
+    
+StopContainers()
+{
+    echo "StopContainers()"
+    returnCode=$?
+    trap - EXIT
+    i=1
+    while [ $i -le $containerCount ]; do
+        docker stop "container_$i"
+        i=$((i+1))
+    done
+    docker rmi -f source
+    exit $returnCode
+}
+trap StopContainers EXIT TERM INT QUIT HUP
+
+docker build -t source .
+i=1;
+while [ $i -le $containerCount ]; do
+    docker run -d --rm --name "container_$i" --volume "$Tom:/main/shared" source
+    i=$((i+1));
+done
+docker ps -a
+echo "RunContainers Alive"
+
+while :; do
+{
+    sleep 1
+}
+done
