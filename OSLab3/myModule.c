@@ -1,3 +1,4 @@
+// задание: рассчитать расстояние Voyager 1 до земли
 #include<linux/kernel.h>
 #include <linux/module.h> /* Needed by all modules */
 #include <linux/printk.h> /* Needed for pr_info() */
