@@ -47,6 +47,7 @@ static const struct proc_ops proc_file_fops = {
 
 static int __init ModuleInit(void)
 {  
+    pr_info("Welcome to the Tomsk State University\n");
     our_proc_file = proc_create(procfsName, 0644, NULL, &proc_file_fops);
     return 0;
 }  
@@ -54,6 +55,7 @@ static int __init ModuleInit(void)
 static void __exit ModuleExit(void)  
 {
     proc_remove(our_proc_file);
+    pr_info("Tomsk State University forever!\n");
     pr_info("/proc/ removed\n");
 }  
   
